@@ -91,7 +91,7 @@ export default function LandingPage() {
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
         >
-          <source src="http://localhost:8080/bg-video2.mp4" type="video/mp4" />
+          <source src="/bg-video2.mp4" type="video/mp4" />
         </video>
         {/* Natural dark overlay to maintain text readability without altering colors */}
         <div className="absolute inset-0 bg-black/60"></div>
