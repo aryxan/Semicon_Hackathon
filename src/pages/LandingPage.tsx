@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Crosshair, ArrowRight, Layers, Target, Maximize, AlertTriangle, TrendingUp, CheckCircle2, Cpu } from 'lucide-react';
-import { useEffect, useState, useRef, ReactNode } from 'react';
+import { ArrowRight, Layers, Target, Maximize, AlertTriangle, TrendingUp, CheckCircle2, Cpu } from 'lucide-react';
+import { useEffect, useState, useRef } from 'react';
+import type { ReactNode } from 'react';
 
 function FadeInSection({ children }: { children: ReactNode }) {
   const [isVisible, setVisible] = useState(false);
