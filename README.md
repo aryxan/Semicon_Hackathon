@@ -1,32 +1,56 @@
-# React + TypeScript + Vite
+# Drift-Sense: Nanoscale Navigation-Error Recovery
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Drift-Sense is a cutting-edge web application designed for high-resolution semiconductor metrology. It addresses the critical problem of navigation drift, allowing engineers and automated systems to recover precise inspection coordinates using scale-aware image localization.
 
-Currently, two official plugins are available:
+## 🎯 The Problem
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+During automated semiconductor inspection, stage movement inevitably introduces positional errors (drift). Finding the original high-resolution reference site within a lower-resolution, wider search field is challenging because:
+- **Repeating Structures:** Layouts like DRAM and FinFETs are highly periodic, leading to false positives.
+- **Scale Difference:** The reference pattern often appears at a vastly different scale (e.g., 10× reduction).
+- **Imaging Noise:** Search images have lower resolution and more noise.
 
-## React Compiler
+## ✨ Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Scale-Aware Processing:** Intelligently processes images across an order-of-magnitude scale difference.
+- **Interactive Localization Workspace:** A comprehensive interface for locating sites.
+- **Methodology & Benchmarks:** Deep dive into how our pipeline works, from candidate matching to center selection.
+- **Stunning UI:** Powered by React, Tailwind CSS, and OGL-based WebGL animations (WebThreads).
 
-## Expanding the Oxlint configuration
+## 🚀 Getting Started
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+### Prerequisites
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
+- Node.js (v18+)
+- npm
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/aryxan/Semicon_Hackathon.git
+   cd Semicon_Hackathon
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+4. Open your browser and navigate to `http://localhost:5173`.
+
+## 🛠️ Technology Stack
+
+- **Frontend Framework:** React 19 + TypeScript
+- **Build Tool:** Vite
+- **Styling:** Tailwind CSS
+- **Graphics/Animations:** OGL (WebGL)
+- **Icons:** Lucide React
+
+## 📄 License
+
+This project was built for the Semicon Hackathon.
