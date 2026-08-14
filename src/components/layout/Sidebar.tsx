@@ -1,14 +1,13 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Crosshair, Database, BarChart3, HelpCircle, Settings, Home } from 'lucide-react';
+import { Crosshair, Database, Home, ActivitySquare } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 const navigation = [
   { name: 'Overview', href: '/', icon: Home },
-  { name: 'Localization', href: '/app', icon: Crosshair },
-  { name: 'Dataset Generator', href: '/dataset', icon: Database },
-  { name: 'Benchmark', href: '/benchmark', icon: BarChart3 },
-  { name: 'Explainability', href: '/explainability', icon: HelpCircle },
+  { name: 'Inline Inspection', href: '/inspection', icon: Crosshair },
+  { name: 'Wafer History', href: '/history', icon: Database },
+  { name: 'Engineer Dashboard', href: '/dashboard', icon: ActivitySquare },
 ];
 
 export default function Sidebar() {
@@ -43,12 +42,6 @@ export default function Sidebar() {
             </Link>
           );
         })}
-      </div>
-      <div className="p-4 border-t border-[var(--color-border-light)]">
-        <button className="group flex w-full items-center px-3 py-2 text-sm font-medium rounded-md text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)] hover:text-[var(--color-text-primary)] transition-colors">
-          <Settings className="mr-3 flex-shrink-0 h-5 w-5 text-[var(--color-text-tertiary)] group-hover:text-[var(--color-text-secondary)] transition-colors" />
-          Settings
-        </button>
       </div>
     </div>
   );
