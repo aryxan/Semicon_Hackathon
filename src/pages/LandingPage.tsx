@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Layers, Target, Maximize, AlertTriangle, TrendingUp, CheckCircle2, Cpu } from 'lucide-react';
 import { useEffect, useState, useRef } from 'react';
 import type { ReactNode } from 'react';
+import SpecularButton from '../components/ui/SpecularButton';
 
 function FadeInSection({ children }: { children: ReactNode }) {
   const [isVisible, setVisible] = useState(false);
@@ -99,9 +100,9 @@ export default function LandingPage() {
 
       <div className="relative z-10 pointer-events-auto">
         {/* Header */}
-        <header className={`fixed top-0 inset-x-0 z-50 h-16 border-b transition-all duration-300 flex items-center justify-between px-8 ${
+        <header className={`fixed top-0 inset-x-0 z-50 h-16 transition-all duration-300 flex items-center justify-between px-8 ${
           hidden ? '-translate-y-full opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'
-        } ${scrolled ? 'bg-[#020617]/90 backdrop-blur-xl border-white/5' : 'bg-transparent border-transparent'}`}>
+        } ${scrolled ? 'bg-[#020617]/90 backdrop-blur-xl' : 'bg-transparent border-transparent'}`}>
           <div className="flex items-center space-x-3">
             <img src="/favicon.svg" alt="FabSight Logo" className="h-8 w-8" />
             <span className="font-bold text-xl tracking-tight text-white">FabSight</span>
@@ -113,9 +114,24 @@ export default function LandingPage() {
             <a href="#team" className="hover:text-white transition-colors">Team</a>
           </div>
           <div>
-            <button onClick={handleLaunch} className="bg-white/10 hover:bg-white/20 border border-white/10 text-white font-semibold px-4 py-2 rounded-full text-sm transition-all flex items-center backdrop-blur-md cursor-pointer">
+            <SpecularButton
+              size="sm"
+              radius={9999}
+              tint="#ffffff"
+              tintOpacity={0.05}
+              blur={10}
+              textColor="#ffffff"
+              lineColor="#ffffff"
+              baseColor="#020617"
+              intensity={1.2}
+              shineSize={10}
+              shineFade={20}
+              thickness={1}
+              onClick={handleLaunch}
+              className="font-semibold flex items-center"
+            >
               Launch App <ArrowRight className="ml-2 h-4 w-4" />
-            </button>
+            </SpecularButton>
           </div>
         </header>
 
@@ -134,28 +150,73 @@ export default function LandingPage() {
                  Our system doesn't just locate SEM images. We monitor how a wafer changes throughout the fabrication process to identify when manufacturing errors begin to accumulate.
                </p>
                <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 pt-8 justify-center w-full sm:w-auto">
-                 <button onClick={handleLaunch} className="bg-[var(--color-accent)] hover:bg-sky-400 text-slate-950 font-semibold px-8 py-4 rounded-full transition-all flex items-center justify-center text-lg shadow-[0_0_20px_rgba(56,189,248,0.3)] hover:shadow-[0_0_30px_rgba(56,189,248,0.5)] transform hover:-translate-y-0.5 cursor-pointer">
+                 <SpecularButton
+                   size="lg"
+                   radius={9999}
+                   tint="#38bdf8"
+                   tintOpacity={0.15}
+                   blur={12}
+                   textColor="#ffffff"
+                   lineColor="#38bdf8"
+                   baseColor="#020617"
+                   intensity={1.5}
+                   shineSize={15}
+                   shineFade={35}
+                   thickness={2}
+                   followMouse
+                   onClick={handleLaunch}
+                   className="shadow-[0_0_20px_rgba(56,189,248,0.2)] hover:shadow-[0_0_30px_rgba(56,189,248,0.4)]"
+                 >
                    Inline Inspection
-                 </button>
-                 <Link to="/dashboard" className="bg-white/5 hover:bg-white/10 border border-white/10 text-white font-medium px-8 py-4 rounded-full transition-all flex items-center justify-center text-lg backdrop-blur-md">
+                 </SpecularButton>
+                 <SpecularButton
+                   size="lg"
+                   radius={9999}
+                   tint="#ffffff"
+                   tintOpacity={0.05}
+                   blur={12}
+                   textColor="#ffffff"
+                   lineColor="#ffffff"
+                   baseColor="#020617"
+                   intensity={1.2}
+                   shineSize={15}
+                   shineFade={35}
+                   thickness={1.5}
+                   followMouse
+                   onClick={() => navigate('/dashboard')}
+                 >
                    Engineer Dashboard
-                 </Link>
+                 </SpecularButton>
                </div>
             </div>
           </section>
 
         {/* The Navigation Challenge */}
-        <section id="challenge" className="py-24 bg-[#020617]/40 backdrop-blur-md relative z-10 border-t border-white/5">
+        <section id="challenge" className="py-24 bg-[#020617]/40 backdrop-blur-md relative z-10">
           <FadeInSection>
             <div className="max-w-6xl mx-auto px-8">
               <div className="text-center mb-16">
-                <div className="inline-flex items-center rounded-full border border-sky-400/30 bg-sky-500/10 px-3 py-1 text-xs font-semibold text-sky-400 uppercase tracking-widest mb-4">
-                  The Problem
-                </div>
                 <h2 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight">Nanoscale Navigation-Error Recovery</h2>
-                <p className="text-slate-400 max-w-2xl mx-auto text-lg">
+                <p className="text-slate-400 max-w-2xl mx-auto text-lg mb-8">
                   Automated inspection relies on scale-aware image localization. Finding the original reference site within a lower-resolution, wider search field is exceptionally difficult due to three primary factors:
                 </p>
+                <SpecularButton
+                  size="md"
+                  radius={9999}
+                  tint="#ffffff"
+                  tintOpacity={0.05}
+                  blur={10}
+                  textColor="#ffffff"
+                  lineColor="#ffffff"
+                  baseColor="#020617"
+                  intensity={1.2}
+                  shineSize={10}
+                  shineFade={20}
+                  thickness={1}
+                  onClick={() => document.getElementById('fabrication')?.scrollIntoView({ behavior: 'smooth' })}
+                >
+                  Explore Root Causes <ArrowRight className="ml-2 h-4 w-4 inline-block" />
+                </SpecularButton>
               </div>
               <div className="grid md:grid-cols-3 gap-8">
                 <div className="bg-black/50 border border-slate-800 p-8 rounded-2xl hover:border-sky-500/50 transition-colors">
@@ -179,7 +240,7 @@ export default function LandingPage() {
         </section>
 
         {/* Fabrication Drift Context */}
-        <section id="fabrication" className="py-24 bg-[#020617]/40 backdrop-blur-md border-t border-white/5 relative z-10">
+        <section id="fabrication" className="py-24 bg-[#020617]/40 backdrop-blur-md relative z-10">
           <FadeInSection>
             <div className="max-w-6xl mx-auto px-8">
               <div className="text-center mb-16">
@@ -253,7 +314,7 @@ export default function LandingPage() {
         </section>
 
         {/* Team Responsibilities */}
-        <section id="team" className="py-24 bg-[#020617]/40 backdrop-blur-md border-t border-white/5 relative z-10">
+        <section id="team" className="py-24 bg-[#020617]/40 backdrop-blur-md relative z-10">
           <FadeInSection>
             <div className="max-w-6xl mx-auto px-8">
               <h2 className="text-3xl md:text-4xl font-bold mb-16 text-center tracking-tight">Cross-Functional Implementation</h2>
@@ -281,7 +342,7 @@ export default function LandingPage() {
 
       </main>
 
-      <footer className="py-12 px-8 border-t border-white/10 text-center bg-[#020617]/80 backdrop-blur-md relative z-10">
+      <footer className="py-12 px-8 text-center bg-[#020617]/80 backdrop-blur-md relative z-10">
         <div className="flex items-center justify-center space-x-3 mb-4">
           <img src="/favicon.svg" alt="FabSight Logo" className="h-8 w-8 grayscale opacity-70" />
           <span className="font-bold text-xl text-white tracking-tight">FabSight</span>
@@ -331,3 +392,4 @@ function TeamCard({ role, tasks }: { role: string, tasks: string[] }) {
 function ActivityTriangle(props: any) {
   return <AlertTriangle {...props} />;
 }
+

@@ -1,0 +1,43 @@
+data:
+  image_dir: data/images
+  metrology_csv: data/wafer_metrology_history.csv
+  reference_name: 000_golden_reference.png
+matching:
+  base_scale: 0.10
+  scale_candidates: [0.10]
+  top_k: 10
+  nms_radius_px: 35
+  min_score: 0.20
+  center_sigma_px: 250.0
+  context_padding: 20
+features:
+  detector: SIFT
+  ratio_threshold: 0.75
+  min_matches: 6
+  min_inliers: 4
+  min_inlier_ratio: 0.35
+  ransac_reproj_threshold: 3.0
+confidence:
+  low_threshold: 0.45
+  robust_threshold: 0.60
+refinement:
+  enabled: true
+  ecc_iterations: 100
+  ecc_epsilon: 1.0e-6
+benchmark:
+  error_thresholds_px: [0.5, 1.0, 2.0, 5.0]
+  max_images: null
+synthetic:
+  size: 1000
+  seed: 42
+rotation:
+  enabled: true
+
+  # Coarse rotation search
+  min_deg: -5.0
+  max_deg: 5.0
+  coarse_step_deg: 0.5
+
+  # Fine search around the best coarse angle
+  fine_range_deg: 0.5
+  fine_step_deg: 0.1
