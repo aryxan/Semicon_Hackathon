@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Activity, CheckCircle2, XCircle } from 'lucide-react';
-import { API_BASE_URL } from '../../config/api';
 
 interface HealthStatus {
   frontend: string;
@@ -19,7 +18,7 @@ export const SystemHealthPanel = () => {
   useEffect(() => {
     const fetchHealth = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/health`);
+        const response = await fetch('http://localhost:49999/api/health');
         if (response.ok) {
           setHealth(await response.json());
         }

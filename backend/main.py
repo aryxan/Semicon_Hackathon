@@ -16,14 +16,10 @@ import uvicorn
 
 app = FastAPI(title="Drift-Sense ML API")
 
-raw_origins = os.getenv("ALLOWED_ORIGINS", "*")
-allowed_origins = [origin.strip() for origin in raw_origins.split(",") if origin.strip()]
-allow_credentials = "*" not in allowed_origins
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins,
-    allow_credentials=allow_credentials,
+    allow_origins=["*"],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )

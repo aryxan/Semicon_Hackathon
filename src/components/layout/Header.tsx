@@ -5,7 +5,7 @@ export default function Header() {
   return (
     <header className="h-16 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-6 z-10 sticky top-0">
       <div className="flex items-center space-x-4">
-        <Link to="/app" className="flex items-center space-x-2 text-sky-500 mr-4">
+        <Link to="/" className="flex items-center space-x-2 text-sky-500 mr-4">
           <img src="/favicon.svg" alt="SemSight" className="h-7 w-7" />
           <span className="text-xl font-bold font-mono tracking-wider">SEM<span className="text-white">SIGHT</span></span>
         </Link>

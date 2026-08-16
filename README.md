@@ -50,22 +50,6 @@ SemSight is an enterprise-grade semiconductor yield analytics and nanoscale navi
 5. Open your browser and navigate to `http://localhost:5173`. 
 *(Default Login: admin / admin)*
 
-## Vercel Deployment
-
-This repo is configured so Vercel serves the React frontend and routes `/api/*` to FastAPI.
-
-1. Import this repository into Vercel.
-2. In Vercel Project Settings, add environment variables (do not commit real secrets):
-   - `ALLOWED_ORIGINS` (comma-separated origins, or `*`)
-   - `OLLAMA_URL`
-   - `OLLAMA_MODEL`
-   - Optional frontend override: `VITE_API_BASE_URL` (leave unset to use same-domain `/api` in production)
-3. Deploy.
-
-Notes:
-- Keep secrets in Vercel Environment Variables, not in the repository.
-- Local defaults are preserved for development (`http://127.0.0.1:49999`).
-
 ## 🛠️ Technology Stack
 
 - **Frontend:** React 19 + TypeScript, Vite, Tailwind CSS, Recharts, GSAP, Lucide React
