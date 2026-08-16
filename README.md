@@ -65,6 +65,7 @@ This repo is configured so Vercel serves the React frontend and routes `/api/*` 
 Notes:
 - Keep secrets in Vercel Environment Variables, not in the repository.
 - Local defaults are preserved for development (`http://127.0.0.1:49999`).
+- The deployment pins Python 3.11 and CPU-focused ML dependencies to avoid oversized CUDA/NCCL installs in serverless builds.
 
 ## 🛠️ Technology Stack
 
