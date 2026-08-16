@@ -1,20 +1,23 @@
-import { CheckCircle2, AlertTriangle, AlertOctagon, TrendingUp, Cpu, Server, ActivitySquare, Database, Crosshair } from 'lucide-react';
+import React from 'react';
+import { CheckCircle2, AlertTriangle, AlertOctagon, TrendingUp, Cpu, Server, ActivitySquare, Database, Crosshair, RefreshCw } from 'lucide-react';
 import { waferDatabase } from '../data/wafers';
+import { useNavigate } from 'react-router-dom';
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
 import { useAppContext } from '../context/AppContext';
 
 export default function Overview() {
-  const { openWaferDrawer } = useAppContext();
-  const totalWafers = waferDatabase.length;
-  const normalWafers = waferDatabase.filter(w => w.status === 'NORMAL').length;
-  const driftWafers = waferDatabase.filter(w => w.status === 'DRIFT').length;
-  const criticalWafers = waferDatabase.filter(w => w.status === 'CRITICAL').length;
+  const navigate = useNavigate();
+  const { openWaferDrawer, wafers, refreshWafers, holdWafer, cancelHold } = useAppContext() as any;
+  const totalWafers = wafers?.length || 0;
+  const normalWafers = wafers?.filter((w: any) => w.status === 'NORMAL').length || 0;
+  const driftWafers = wafers?.filter((w: any) => w.status === 'DRIFT').length || 0;
+  const criticalWafers = wafers?.filter((w: any) => w.status === 'CRITICAL').length || 0;
 
   const avgOverlayError = totalWafers > 0
-    ? (waferDatabase.reduce((acc, w) => acc + (w.stages?.[3]?.overlayError ?? 0), 0) / totalWafers).toFixed(2)
+    ? (wafers.reduce((acc: any, w: any) => acc + (w.stages?.[3]?.overlayError ?? 0), 0) / totalWafers).toFixed(2)
     : '0.00';
   const avgConfidence = totalWafers > 0
-    ? (waferDatabase.reduce((acc, w) => acc + (w.stages?.[3]?.confidence ?? 0), 0) / totalWafers).toFixed(1)
+    ? (wafers.reduce((acc: any, w: any) => acc + (w.stages?.[3]?.confidence ?? 0), 0) / totalWafers).toFixed(1)
     : '0.0';
 
   const pieData = [
@@ -24,13 +27,13 @@ export default function Overview() {
   ];
 
   const trendData = [
-    { stage: 'Lithography', overlay: totalWafers > 0 ? (waferDatabase.reduce((acc, w) => acc + (w.stages?.[0]?.overlayError ?? 0), 0) / totalWafers) : 0 },
-    { stage: 'Etching', overlay: totalWafers > 0 ? (waferDatabase.reduce((acc, w) => acc + (w.stages?.[1]?.overlayError ?? 0), 0) / totalWafers) : 0 },
-    { stage: 'CMP', overlay: totalWafers > 0 ? (waferDatabase.reduce((acc, w) => acc + (w.stages?.[2]?.overlayError ?? 0), 0) / totalWafers) : 0 },
-    { stage: 'Metal-1', overlay: totalWafers > 0 ? (waferDatabase.reduce((acc, w) => acc + (w.stages?.[3]?.overlayError ?? 0), 0) / totalWafers) : 0 }
+    { stage: 'Lithography', overlay: totalWafers > 0 ? (wafers.reduce((acc: any, w: any) => acc + (w.stages?.[0]?.overlayError ?? 0), 0) / totalWafers) : 0 },
+    { stage: 'Etching', overlay: totalWafers > 0 ? (wafers.reduce((acc: any, w: any) => acc + (w.stages?.[1]?.overlayError ?? 0), 0) / totalWafers) : 0 },
+    { stage: 'CMP', overlay: totalWafers > 0 ? (wafers.reduce((acc: any, w: any) => acc + (w.stages?.[2]?.overlayError ?? 0), 0) / totalWafers) : 0 },
+    { stage: 'Metal-1', overlay: totalWafers > 0 ? (wafers.reduce((acc: any, w: any) => acc + (w.stages?.[3]?.overlayError ?? 0), 0) / totalWafers) : 0 }
   ];
 
-  const alerts = waferDatabase.filter(w => w.status !== 'NORMAL').sort((a, b) => b.riskScore - a.riskScore).slice(0, 3);
+  const alerts = wafers?.filter((w: any) => w.status !== 'NORMAL').sort((a: any, b: any) => b.riskScore - a.riskScore).slice(0, 3) || [];
 
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-8">
@@ -41,9 +44,18 @@ export default function Overview() {
             High-level metrics and system health.
           </p>
         </div>
-        <div className="flex items-center space-x-2 bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-2">
-          <ActivitySquare className="h-5 w-5 text-emerald-400" />
-          <span className="text-slate-300 font-medium">System ONLINE</span>
+        <div className="flex items-center space-x-4">
+          <button 
+            onClick={refreshWafers}
+            className="flex items-center space-x-2 bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 border border-sky-500/30 transition-colors rounded-lg px-4 py-2"
+          >
+            <RefreshCw className="h-5 w-5" />
+            <span className="font-medium">Refresh System</span>
+          </button>
+          <div className="flex items-center space-x-2 bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-2">
+            <ActivitySquare className="h-5 w-5 text-emerald-400" />
+            <span className="text-slate-300 font-medium">System ONLINE</span>
+          </div>
         </div>
       </div>
 
@@ -108,7 +120,9 @@ export default function Overview() {
         </div>
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-8">
+
+
+      <div className="grid lg:grid-cols-3 gap-8 mt-8">
         <div className="space-y-6">
           <div className="bg-[var(--color-surface)] border border-[var(--color-border-light)] rounded-xl p-6 h-full">
             <h2 className="text-xl font-semibold text-white mb-6">Risk Distribution</h2>
@@ -156,7 +170,7 @@ export default function Overview() {
           <div className="bg-[var(--color-surface)] border border-[var(--color-border-light)] rounded-xl p-6 h-full">
             <h2 className="text-xl font-semibold text-white mb-6">Recent Alerts</h2>
             <div className="space-y-4">
-              {alerts.map(wafer => (
+              {alerts.map((wafer: any) => (
                 <div key={wafer.waferId} onClick={() => openWaferDrawer(wafer.waferId)} className="flex flex-col p-4 bg-slate-900 border border-slate-800 hover:border-slate-700 transition-colors rounded-lg cursor-pointer">
                   <div className="flex justify-between items-start mb-2">
                     <span className="font-mono text-lg text-slate-200">{wafer.waferId}</span>
@@ -165,8 +179,24 @@ export default function Overview() {
                     </span>
                   </div>
                   <div className="flex justify-between items-end">
-                    <div className="text-sm text-slate-400">Risk: <span className="text-slate-200">{wafer.riskScore.toFixed(1)}%</span></div>
-                    <span className="text-xs text-rose-400 font-semibold uppercase tracking-wider">HOLD / STOP</span>
+                    <div className="text-sm text-slate-400">Risk: <span className="text-slate-200">{Math.min(100, Math.max(0, wafer.riskScore)).toFixed(1)}%</span></div>
+                    <button 
+                      onClick={(e) => { 
+                        e.stopPropagation(); 
+                        if (wafer.status === 'HELD') {
+                          cancelHold(wafer.waferId);
+                        } else {
+                          holdWafer(wafer.waferId); 
+                        }
+                      }}
+                      className={`text-xs px-2 py-1 rounded font-semibold uppercase tracking-wider transition-colors ${
+                        wafer.status === 'HELD' 
+                          ? 'text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20' 
+                          : 'text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20'
+                      }`}
+                    >
+                      {wafer.status === 'HELD' ? 'RELEASE' : 'HOLD / STOP'}
+                    </button>
                   </div>
                 </div>
               ))}

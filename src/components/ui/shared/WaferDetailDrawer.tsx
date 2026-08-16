@@ -8,10 +8,10 @@ import { RiskPrediction } from '../../../types';
 const riskProvider = new RealRiskProvider();
 
 export default function WaferDetailDrawer() {
-  const { selectedWaferId, closeWaferDrawer } = useAppContext();
+  const { selectedWaferId, closeWaferDrawer, wafers, holdWafer, cancelHold } = useAppContext() as any;
   const [risk, setRisk] = useState<RiskPrediction | null>(null);
 
-  const wafer = getWaferById(selectedWaferId);
+  const wafer = wafers?.find((w: any) => w.waferId === selectedWaferId) || getWaferById(selectedWaferId);
 
   useEffect(() => {
     if (!wafer) return;
@@ -61,13 +61,29 @@ export default function WaferDetailDrawer() {
             <div className="flex-1 bg-slate-950 border border-slate-800 p-4 rounded-xl">
               <div className="text-xs text-slate-400 mb-1 uppercase tracking-wider">Risk Level</div>
               <div className={`text-xl font-bold ${wafer.status === 'CRITICAL' ? 'text-rose-500' : wafer.status === 'DRIFT' ? 'text-amber-500' : 'text-emerald-500'}`}>
-                {wafer.riskScore.toFixed(1)}% {wafer.status}
+                {Math.min(100, Math.max(0, wafer.riskScore)).toFixed(1)}% {wafer.status}
               </div>
             </div>
             <div className="flex-1 bg-slate-950 border border-slate-800 p-4 rounded-xl">
               <div className="text-xs text-slate-400 mb-1 uppercase tracking-wider">Required Action</div>
-              <div className={`text-lg font-bold ${wafer.status !== 'NORMAL' ? 'text-rose-400' : 'text-emerald-400'}`}>
-                {wafer.status !== 'NORMAL' ? 'HOLD / STOP' : 'PASS'}
+              <div className={`text-lg font-bold ${wafer.status === 'HELD' ? 'text-emerald-400' : wafer.status !== 'NORMAL' ? 'text-rose-400' : 'text-emerald-400'}`}>
+                {wafer.status === 'HELD' ? (
+                  <button 
+                    onClick={() => cancelHold(wafer.waferId)}
+                    className="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded transition-colors"
+                  >
+                    RELEASE
+                  </button>
+                ) : wafer.status !== 'NORMAL' ? (
+                  <button 
+                    onClick={() => holdWafer(wafer.waferId)}
+                    className="bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 px-3 py-1 rounded transition-colors"
+                  >
+                    HOLD / STOP
+                  </button>
+                ) : (
+                  'PASS'
+                )}
               </div>
             </div>
           </div>

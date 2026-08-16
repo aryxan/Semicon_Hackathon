@@ -1,27 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <defs>
-    <linearGradient id="waferGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0f172a" />
-      <stop offset="100%" stop-color="#020617" />
-    </linearGradient>
-    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.6" />
-      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0" />
-    </radialGradient>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Outer glowing hexagon -->
+  <path d="M50 5 L90 27.5 L90 72.5 L50 95 L10 72.5 L10 27.5 Z" stroke="#38bdf8" stroke-width="6" fill="rgba(14, 165, 233, 0.1)"/>
   
-  <!-- Outer Wafer -->
-  <circle cx="50" cy="50" r="46" fill="url(#waferGrad)" stroke="#1e293b" stroke-width="2" />
+  <!-- Inner circuit lines -->
+  <path d="M50 20 L50 45" stroke="#e2e8f0" stroke-width="6" stroke-linecap="round"/>
+  <path d="M30 35 L45 50" stroke="#e2e8f0" stroke-width="6" stroke-linecap="round"/>
+  <path d="M70 35 L55 50" stroke="#e2e8f0" stroke-width="6" stroke-linecap="round"/>
   
-  <!-- Inner Glow -->
-  <circle cx="50" cy="50" r="30" fill="url(#glow)" />
+  <!-- Central "Sight" core (Eye/Lens) -->
+  <circle cx="50" cy="55" r="12" fill="#38bdf8"/>
+  <circle cx="50" cy="55" r="4" fill="#0f172a"/>
   
-  <!-- Grid Lines (Silicon Dies) -->
-  <path d="M 20 50 L 80 50 M 50 20 L 50 80 M 35 25 L 35 75 M 65 25 L 65 75 M 25 35 L 75 35 M 25 65 L 75 65" stroke="#38bdf8" stroke-opacity="0.2" stroke-width="1" />
-  
-  <!-- Precision Crosshair (Alignment Mark) -->
-  <path d="M 50 35 L 50 45 M 50 55 L 50 65 M 35 50 L 45 50 M 55 50 L 65 50" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" />
-  
-  <!-- Center Dot -->
-  <circle cx="50" cy="50" r="3" fill="#ffffff" />
+  <!-- Bottom connection -->
+  <path d="M50 67 L50 80" stroke="#e2e8f0" stroke-width="6" stroke-linecap="round"/>
 </svg>

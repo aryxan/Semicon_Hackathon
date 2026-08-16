@@ -5,7 +5,7 @@ data:
 matching:
   base_scale: 0.10
   scale_candidates: [0.10]
-  top_k: 10
+  top_k: 50
   nms_radius_px: 35
   min_score: 0.20
   center_sigma_px: 250.0
@@ -19,7 +19,7 @@ features:
   ransac_reproj_threshold: 3.0
 confidence:
   low_threshold: 0.45
-  robust_threshold: 0.60
+  robust_threshold: 0.99
 refinement:
   enabled: true
   ecc_iterations: 100

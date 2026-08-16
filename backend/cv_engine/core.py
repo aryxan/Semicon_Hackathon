@@ -154,13 +154,17 @@ def rank_candidates(cands, shape, sigma, ref, search, padding):
         d=math.hypot(c.x-cx,c.y-cy)
         c.center_score=math.exp(-(d*d)/(2*sigma*sigma))
         c.context_score=context_score(search,ref,c,padding)
-        sim=(c.score-lo)/(hi-lo) if hi>lo else 1.0
+        # Use raw score for similarity to avoid amplifying tiny noise differences
+        # when the template matches multiple periodic grid cells almost equally.
+        sim = c.score
+        
         # Center is a prior/tie-breaker, not a blind selector.
+        # Heavily increased center weight to avoid aliasing on periodic wafer grids
         c.final_score = (
-        0.65 * sim +
-        0.15 * c.context_score +
-        0.10 * c.center_score +
-        0.10 * c.rotation_score
+        0.40 * sim +
+        0.10 * c.context_score +
+        0.50 * c.center_score +
+        0.00 * c.rotation_score
 )
 
     return sorted(cands,key=lambda c:c.final_score,reverse=True)
@@ -250,6 +254,8 @@ class Localizer:
         self.cfg["matching"]["min_score"],
         angles
         )
+        cands = rank_candidates(cands,img.shape,self.cfg['matching']['center_sigma_px'],ref,img,self.cfg['matching']['context_padding'])
+
         cands = refine_rotation_candidates(
         img,
         ref,
@@ -274,7 +280,7 @@ class Localizer:
 
                 # Phase 8-9: optional ECC refinement on a same-size target patch.
                 if self.cfg.get('refinement',{}).get('enabled',True):
-                    coarse=transform_point(M,reference_point)
+                    coarse=transform_point(M, (reference_point[0]*best.scale, reference_point[1]*best.scale))
                     th,tw=tpl.shape[:2]
                     ox=max(0,min(img.shape[1]-tw,round(coarse[0]-tw/2)))
                     oy=max(0,min(img.shape[0]-th,round(coarse[1]-th/2)))
@@ -295,7 +301,7 @@ class Localizer:
                             agreement=min(1.0,agreement+0.05)
                     except cv2.error:
                         pass
-        pred = transform_point(M, reference_point) if M is not None else (best.x, best.y)
+        pred = transform_point(M, (reference_point[0]*best.scale, reference_point[1]*best.scale)) if M is not None else (best.x, best.y)
         center_distance = math.hypot(best.x - reference_point[0], best.y - reference_point[1])
 
         # Strong template matches on repetitive synthetic wafer patterns can legitimately have

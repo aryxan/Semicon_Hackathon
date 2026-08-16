@@ -8,12 +8,11 @@ import { useAppContext } from '../context/AppContext';
 const cvProvider = new RealCVProvider();
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:49999';
 
-// Frontend display conversion: model works in px, screen shows nm
-// Based on calibration: -198.29 px → -9.91 nm ≈ 0.05 nm/px
-const PX_TO_NM = 0.05;
+// Based on calibration: 1 px = 10 nm
+const PX_TO_NM = 10.0;
 
 export default function InlineInspection() {
-  const { selectedWaferId, setSelectedWaferId } = useAppContext() as any;
+  const { selectedWaferId, setSelectedWaferId, updateWaferFromCV, wafers } = useAppContext() as any;
   
   const [analyzing, setAnalyzing] = useState(false);
   const [results, setResults] = useState<CVResult | null>(null);
@@ -26,13 +25,22 @@ export default function InlineInspection() {
     setResults(null);
     
     try {
+      const stageMap: Record<string, string> = {
+        'Lithography': '1_01_Lithography',
+        'Etching': '2_02_Etch',
+        'CMP': '3_03_CMP',
+        'Metal-1': '4_04_Metal1'
+      };
+      const searchImg = `${selectedWafer.replace('W-', 'WF-')}_Stage${stageMap[selectedStage]}.png`;
+
       const res = await cvProvider.locate({
         waferId: selectedWafer,
         stage: selectedStage,
         referenceImage: '000_golden_reference.png',
-        searchImage: 'current_stage_sim.png'
+        searchImage: searchImg
       });
       setResults(res);
+      updateWaferFromCV(selectedWafer, res);
     } catch (e) {
       console.error(e);
     } finally {
@@ -62,7 +70,7 @@ export default function InlineInspection() {
             onChange={(e) => { setSelectedWaferId(e.target.value); setResults(null); }}
             className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white focus:outline-none focus:border-sky-500"
           >
-            {waferDatabase.slice(0, 30).map(w => (
+            {(wafers || []).slice(0, 30).map((w: any) => (
               <option key={w.waferId} value={w.waferId}>{w.waferId} ({w.status})</option>
             ))}
           </select>

@@ -52,21 +52,21 @@ export class RealRiskProvider implements RiskProvider {
             y_error_px: stage1?.yError ?? 0,
             overlay_error_px: stage1?.overlayError ?? 0,
             confidence: stage1?.confidence ?? 0.9,
-            inlier_ratio: 0.8
+            inlier_ratio: stage1?.inlierRatio ?? 0.8
           },
           stage_2: {
             x_error_px: stage2?.xError ?? 0,
             y_error_px: stage2?.yError ?? 0,
             overlay_error_px: stage2?.overlayError ?? 0,
             confidence: stage2?.confidence ?? 0.9,
-            inlier_ratio: 0.8
+            inlier_ratio: stage2?.inlierRatio ?? 0.8
           },
           stage_3: {
             x_error_px: stage3?.xError ?? 0,
             y_error_px: stage3?.yError ?? 0,
             overlay_error_px: stage3?.overlayError ?? 0,
             confidence: stage3?.confidence ?? 0.9,
-            inlier_ratio: 0.8
+            inlier_ratio: stage3?.inlierRatio ?? 0.8
           }
         },
         defects: {

@@ -6,7 +6,7 @@ import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tool
 import { useAppContext } from '../context/AppContext';
 
 export default function WaferHistory() {
-  const { openWaferDrawer } = useAppContext();
+  const { openWaferDrawer, wafers } = useAppContext() as any;
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<RiskStatus | 'ALL'>('ALL');
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
@@ -18,8 +18,9 @@ export default function WaferHistory() {
     setExpandedRows(next);
   };
 
-  const filteredWafers = waferDatabase.filter(w => {
-    const matchesSearch = w.waferId.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredWafers = (wafers || []).filter((w: any) => {
+    const wId = w.waferId || '';
+    const matchesSearch = wId.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'ALL' || w.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
@@ -92,7 +93,7 @@ export default function WaferHistory() {
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
-              {filteredWafers.map((wafer) => {
+              {filteredWafers.map((wafer: any) => {
                 const isExpanded = expandedRows.has(wafer.waferId);
                 const maxOverlay = Math.max(...wafer.stages.map((s: any) => s.overlayError)).toFixed(2);
                 const avgConfidence = (wafer.stages.reduce((acc: number, s: any) => acc + s.confidence, 0) / wafer.stages.length).toFixed(1);

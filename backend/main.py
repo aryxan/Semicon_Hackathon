@@ -9,6 +9,9 @@ from ml_engine.schemas import WaferPredictRequest, WaferPredictResponse
 from ml_engine.model_server import WaferRiskPredictor
 from cv_engine.schemas import CVLocateRequest, CVLocateResponse
 from cv_engine.cv_server import CVEngineServer
+from ai_engine.ollama_client import OllamaClient
+from ai_engine.schemas import AIAnalyzeRequest, AIAnalyzeResponse
+from db.database import init_db
 import uvicorn
 
 app = FastAPI(title="Drift-Sense ML API")
@@ -29,6 +32,7 @@ if os.path.exists(data_dir):
 
 predictor = None
 cv_server = None
+ollama_client = None
 
 STAGE_NAME_MAP = {
     "01_Lithography": "Lithography",
@@ -99,7 +103,13 @@ def load_wafer_history():
 
 @app.on_event("startup")
 async def startup_event():
-    global predictor, cv_server
+    global predictor, cv_server, ollama_client
+    
+    try:
+        init_db()
+    except Exception as e:
+        print(f"Failed to initialize database: {e}")
+        
     try:
         predictor = WaferRiskPredictor.get_instance()
     except Exception as e:
@@ -109,25 +119,65 @@ async def startup_event():
         cv_server = CVEngineServer.get_instance()
     except Exception as e:
         print(f"Failed to load CV Engine: {e}")
+        
+    try:
+        ollama_client = OllamaClient()
+    except Exception as e:
+        print(f"Failed to load Ollama client: {e}")
 
 @app.get("/api/health")
 async def health_check():
-    global predictor, cv_server
+    global predictor, cv_server, ollama_client
     return {
+        "frontend": "online",
         "backend": "online",
-        "ml_model": "loaded" if predictor else "unavailable",
-        "cv_engine": "loaded" if cv_server else "unavailable",
-        "xgboost": "ready" if predictor else "failed",
-        "device": predictor.device_used if predictor else "unknown"
+        "cv": "READY" if cv_server else "UNAVAILABLE",
+        "model": "LOADED" if predictor else "UNAVAILABLE",
+        "shap": "READY" if predictor and predictor.booster else "UNAVAILABLE",
+        "ollama": "READY" if ollama_client else "UNAVAILABLE",
+        "database": "READY",
+        "device": predictor.device_used if predictor else "cpu"
     }
+
+@app.post("/api/wafer/save")
+async def save_wafer_endpoint(wafer_data: dict):
+    try:
+        from db.database import save_wafer
+        save_wafer(wafer_data)
+        return {"status": "success"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail={"error": "SAVE_FAILED", "message": str(e)})
 
 @app.get("/api/wafer/history")
 async def wafer_history():
     try:
-        return load_wafer_history()
+        from db.database import get_all_wafers
+        wafers = get_all_wafers()
+        if not wafers:
+            wafers = load_wafer_history()
+            # Seed the database
+            from db.database import save_wafer
+            for w in wafers:
+                save_wafer(w)
+        return wafers
     except Exception as exc:
         raise HTTPException(status_code=500, detail={"error": "HISTORY_LOAD_FAILED", "message": str(exc)})
 
+@app.post("/api/ai/analyze", response_model=AIAnalyzeResponse)
+async def analyze_wafer(request: AIAnalyzeRequest):
+    global ollama_client
+    if not ollama_client:
+        return AIAnalyzeResponse(
+            summary="AI Engine unavailable.",
+            risk_interpretation="",
+            observed_trend="",
+            key_factors=[],
+            investigation_points=[],
+            recommended_review="",
+            confidence_caveat="",
+            available=False
+        )
+    return await ollama_client.analyze(request)
 
 @app.post("/api/wafer/predict", response_model=WaferPredictResponse)
 async def predict_wafer(request: WaferPredictRequest):
@@ -155,3 +205,4 @@ async def locate_cv(request: CVLocateRequest):
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="127.0.0.1", port=API_PORT, reload=True)
+# Trigger reload

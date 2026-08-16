@@ -1,56 +1,64 @@
-# Drift-Sense: Nanoscale Navigation-Error Recovery
+# SemSight (formerly Drift-Sense)
 
-Drift-Sense is a cutting-edge web application designed for high-resolution semiconductor metrology. It addresses the critical problem of navigation drift, allowing engineers and automated systems to recover precise inspection coordinates using scale-aware image localization.
-
-## 🎯 The Problem
-
-During automated semiconductor inspection, stage movement inevitably introduces positional errors (drift). Finding the original high-resolution reference site within a lower-resolution, wider search field is challenging because:
-- **Repeating Structures:** Layouts like DRAM and FinFETs are highly periodic, leading to false positives.
-- **Scale Difference:** The reference pattern often appears at a vastly different scale (e.g., 10× reduction).
-- **Imaging Noise:** Search images have lower resolution and more noise.
+SemSight is an enterprise-grade semiconductor yield analytics and nanoscale navigation-error recovery platform. It addresses the critical problem of navigation drift, allowing engineers and automated systems to recover precise inspection coordinates, analyze defect drivers, and proactively prevent yield loss using scale-aware computer vision and machine learning.
 
 ## ✨ Features
 
-- **Scale-Aware Processing:** Intelligently processes images across an order-of-magnitude scale difference.
-- **Interactive Localization Workspace:** A comprehensive interface for locating sites.
-- **Methodology & Benchmarks:** Deep dive into how our pipeline works, from candidate matching to center selection.
-- **Stunning UI:** Powered by React, Tailwind CSS, and OGL-based WebGL animations (WebThreads).
+- **Scale-Aware OpenCV Geometric Registration:** Intelligently processes metrology images across order-of-magnitude scale differences using a dual-pass FAST/RANSAC pipeline for sub-pixel accuracy.
+- **XGBoost Risk Classifier & TreeSHAP:** Predicts structural failure probabilities in real-time and evaluates exact physical defect drivers using SHAP values.
+- **Ollama AI Copilot:** Generates automated Root Cause Analysis (RCA) insights based on live system telemetry.
+- **Enterprise Dashboard:** Built with React, Tailwind CSS, Recharts, and `gsap`-powered MagicBento dynamic layouts for seamless real-time monitoring.
+- **Background Fab Simulator:** A local Python daemon that actively simulates inline metrology ingestion, running images through the CV engine and ML pipelines.
+- **Interactive Wafer Inspection:** Interactive wafer drill-down with HOLD / STOP controls to intercept critical deviations.
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-
 - Node.js (v18+)
-- npm
+- Python 3.10+
+- Ollama (running locally)
 
 ### Installation
 
-1. Clone the repository:
+1. **Clone the repository:**
    ```bash
    git clone https://github.com/aryxan/Semicon_Hackathon.git
    cd Semicon_Hackathon
    ```
 
-2. Install dependencies:
+2. **Frontend Setup:**
    ```bash
    npm install
-   ```
-
-3. Start the development server:
-   ```bash
    npm run dev
    ```
 
-4. Open your browser and navigate to `http://localhost:5173`.
+3. **Backend Setup:**
+   ```bash
+   python -m venv backend/venv
+   # Windows: backend\venv\Scripts\activate
+   # Mac/Linux: source backend/venv/bin/activate
+   pip install -r backend/requirements.txt
+   python backend/main.py
+   ```
+
+4. **Start the Fab Simulator (in a new terminal):**
+   ```bash
+   # Windows: backend\venv\Scripts\activate
+   python simulate_lab.py
+   ```
+
+5. Open your browser and navigate to `http://localhost:5173`. 
+*(Default Login: admin / admin)*
 
 ## 🛠️ Technology Stack
 
-- **Frontend Framework:** React 19 + TypeScript
-- **Build Tool:** Vite
-- **Styling:** Tailwind CSS
-- **Graphics/Animations:** OGL (WebGL)
-- **Icons:** Lucide React
+- **Frontend:** React 19 + TypeScript, Vite, Tailwind CSS, Recharts, GSAP, Lucide React
+- **Backend API:** FastAPI (Python), Uvicorn
+- **Computer Vision:** OpenCV (cv2), NumPy
+- **Machine Learning:** XGBoost, SHAP
+- **AI Agent:** Ollama (LLaMA inference)
+- **Database:** SQLite (local telemetry persistence)
 
 ## 📄 License
 
-This project was built for the Semicon Hackathon.
+Built for the Semicon Hackathon.

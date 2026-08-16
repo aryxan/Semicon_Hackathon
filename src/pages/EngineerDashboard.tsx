@@ -9,14 +9,14 @@ import { RiskPrediction } from '../types';
 const riskProvider = new RealRiskProvider();
 
 export default function EngineerDashboard() {
-  const { selectedWaferId } = useAppContext();
-  const wafer = getWaferById(selectedWaferId);
+  const { selectedWaferId, wafers } = useAppContext() as any;
+  const wafer = wafers.find((w: any) => w.waferId === selectedWaferId) || getWaferById(selectedWaferId);
 
   const [riskPrediction, setRiskPrediction] = useState<RiskPrediction | null>(null);
   const [loading, setLoading] = useState(true);
   
   const [chatLog, setChatLog] = useState<{role: 'user'|'ai', msg: string}[]>([
-    { role: 'ai', msg: `Drift-Sense AI Copilot ready. Ask me about ${wafer.waferId}.` }
+    { role: 'ai', msg: 'Hello. I am the Drift-Sense Engineering Copilot. Analyzing latest process data...' }
   ]);
   const [chatInput, setChatInput] = useState('');
 
@@ -26,13 +26,38 @@ export default function EngineerDashboard() {
       try {
         const risk = await riskProvider.predict({ waferId: wafer.waferId, stages: wafer.stages });
         setRiskPrediction(risk);
+
+        // Fetch AI Analysis from Ollama
+        try {
+          const aiReq = {
+            wafer_id: wafer.waferId,
+            risk_status: risk.status,
+            risk_probability: risk.probability,
+            shap_drivers: risk.shapDrivers,
+            stages_metrology: wafer.stages
+          };
+          const aiResp = await fetch('http://localhost:49999/api/ai/analyze', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(aiReq)
+          });
+          if (aiResp.ok) {
+            const aiData = await aiResp.json();
+            const message = `**Analysis Complete**\nSummary: ${aiData.summary}\n\nInterpretation: ${aiData.risk_interpretation}\n\nKey Factors:\n- ${aiData.key_factors.join('\n- ')}\n\nRecommendation: ${aiData.recommended_review}`;
+            setChatLog(prev => [...prev, { role: 'ai', msg: message }]);
+          }
+        } catch (e) {
+          console.error('AI analysis failed:', e);
+          setChatLog(prev => [...prev, { role: 'ai', msg: 'AI analysis temporarily unavailable.' }]);
+        }
+
       } catch (e) {
         console.error('ML prediction failed:', e);
       }
       setLoading(false);
     }
     fetchData();
-  }, [wafer]);
+  }, [wafer.waferId, wafer.stages]);
 
   const handleSendChat = async () => {
     if (!chatInput.trim()) return;

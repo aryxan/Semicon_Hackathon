@@ -6,8 +6,8 @@ export default function Header() {
     <header className="h-16 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-6 z-10 sticky top-0">
       <div className="flex items-center space-x-4">
         <Link to="/" className="flex items-center space-x-2 text-sky-500 mr-4">
-          <ActivitySquare className="h-7 w-7" />
-          <span className="text-xl font-bold font-mono tracking-wider">DRIFT<span className="text-white">-SENSE</span></span>
+          <img src="/favicon.svg" alt="SemSight" className="h-7 w-7" />
+          <span className="text-xl font-bold font-mono tracking-wider">SEM<span className="text-white">SIGHT</span></span>
         </Link>
       </div>
 
@@ -26,7 +26,7 @@ export default function Header() {
           <Settings className="h-5 w-5" />
         </button>
         <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-sky-500 to-indigo-500 flex items-center justify-center text-sm font-bold text-white border border-white/10 shadow-inner">
-          DS
+          SS
         </div>
       </div>
     </header>
