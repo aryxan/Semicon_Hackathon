@@ -33,16 +33,18 @@ function App() {
       <AppProvider>
         <Router>
           <Routes>
-            <Route path="/landing" element={<LandingPage />} />
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/landing" element={<Navigate to="/" replace />} />
             <Route path="/login" element={<Login />} />
-            <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-              <Route path="/" element={<Overview />} />
-              <Route path="/inspection" element={<InlineInspection />} />
-              <Route path="/history" element={<WaferHistory />} />
-              <Route path="/dashboard" element={<EngineerDashboard />} />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="/profile" element={<Profile />} />
+            <Route path="/app" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
+              <Route index element={<Overview />} />
+              <Route path="inspection" element={<InlineInspection />} />
+              <Route path="history" element={<WaferHistory />} />
+              <Route path="dashboard" element={<EngineerDashboard />} />
+              <Route path="settings" element={<Settings />} />
+              <Route path="profile" element={<Profile />} />
             </Route>
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Router>
       </AppProvider>

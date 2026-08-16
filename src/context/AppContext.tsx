@@ -1,4 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { API_BASE_URL } from '../config/api';
+
+const API_BASE = API_BASE_URL;
 
 interface StageData {
   stage: string;
@@ -59,7 +62,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const refreshWafers = async () => {
     try {
-      const response = await fetch('http://localhost:49999/api/wafer/history');
+      const response = await fetch(`${API_BASE}/api/wafer/history`);
       if (response.ok) {
         const data = await response.json();
         setWafers(data);
@@ -77,7 +80,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setWafers(prev => prev.map(w => w.waferId === id ? updatedWafer : w));
     
     try {
-      await fetch('http://localhost:49999/api/wafer/save', {
+      await fetch(`${API_BASE}/api/wafer/save`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedWafer)
@@ -100,7 +103,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setWafers(prev => prev.map(w => w.waferId === id ? updatedWafer : w));
     
     try {
-      await fetch('http://localhost:49999/api/wafer/save', {
+      await fetch(`${API_BASE}/api/wafer/save`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedWafer)
@@ -178,7 +181,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       
       newWafers[waferIndex] = wafer;
       
-      fetch('http://localhost:49999/api/wafer/save', {
+      fetch(`${API_BASE}/api/wafer/save`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(wafer)

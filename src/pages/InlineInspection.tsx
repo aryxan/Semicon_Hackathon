@@ -4,9 +4,10 @@ import { ProcessStage, CVResult } from '../types';
 import { RealCVProvider } from '../services/realProviders';
 import { getWaferById, waferDatabase } from '../data/wafers';
 import { useAppContext } from '../context/AppContext';
+import { API_BASE_URL } from '../config/api';
 
 const cvProvider = new RealCVProvider();
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:49999';
+const API_BASE = API_BASE_URL;
 
 // Based on calibration: 1 px = 10 nm
 const PX_TO_NM = 10.0;

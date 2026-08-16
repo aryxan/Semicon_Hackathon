@@ -5,6 +5,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import { RealRiskProvider } from '../services/realProviders';
 import { getWaferById, waferDatabase } from '../data/wafers';
 import { RiskPrediction } from '../types';
+import { API_BASE_URL } from '../config/api';
 
 const riskProvider = new RealRiskProvider();
 
@@ -36,7 +37,7 @@ export default function EngineerDashboard() {
             shap_drivers: risk.shapDrivers,
             stages_metrology: wafer.stages
           };
-          const aiResp = await fetch('http://localhost:49999/api/ai/analyze', {
+          const aiResp = await fetch(`${API_BASE_URL}/api/ai/analyze`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(aiReq)

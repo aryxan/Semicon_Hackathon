@@ -1,4 +1,5 @@
 import { Wafer } from '../types';
+import { API_BASE_URL } from '../config/api';
 
 export const waferDatabase: Wafer[] = [];
 
@@ -25,8 +26,7 @@ export async function loadWaferDatabase(): Promise<Wafer[]> {
     return waferDatabase;
   }
 
-  const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:49999';
-  const response = await fetch(`${apiBase}/api/wafer/history`);
+  const response = await fetch(`${API_BASE_URL}/api/wafer/history`);
 
   if (!response.ok) {
     throw new Error(`Failed to load wafer metrology history: ${response.statusText}`);

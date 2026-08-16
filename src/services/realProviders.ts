@@ -1,7 +1,8 @@
 import { RiskProvider, CVProvider } from './providers';
 import { RiskInput, RiskPrediction, InspectionInput, CVResult } from '../types';
+import { API_BASE_URL } from '../config/api';
 
-const DEFAULT_API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:49999';
+const DEFAULT_API_BASE = API_BASE_URL;
 
 export class RealCVProvider implements CVProvider {
   private baseUrl: string;

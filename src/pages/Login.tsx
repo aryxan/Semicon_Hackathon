@@ -15,7 +15,7 @@ export default function Login() {
     e.preventDefault();
     if (login(username, password)) {
       setError(false);
-      navigate('/');
+      navigate('/app');
     } else {
       setError(true);
     }

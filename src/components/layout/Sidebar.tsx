@@ -6,15 +6,15 @@ import { SystemHealthPanel } from '../system/SystemHealthPanel';
 import { useAppContext } from '../../context/AppContext';
 
 const navigation = [
-  { name: 'Overview', href: '/', icon: Home },
-  { name: 'Inline Inspection', href: '/inspection', icon: Crosshair },
-  { name: 'Wafer History', href: '/history', icon: Database },
-  { name: 'Engineer Dashboard', href: '/dashboard', icon: ActivitySquare },
+  { name: 'Overview', href: '/app', icon: Home },
+  { name: 'Inline Inspection', href: '/app/inspection', icon: Crosshair },
+  { name: 'Wafer History', href: '/app/history', icon: Database },
+  { name: 'Engineer Dashboard', href: '/app/dashboard', icon: ActivitySquare },
 ];
 
 const secondaryNav = [
-  { name: 'Settings', href: '/settings', icon: Settings },
-  { name: 'Profile', href: '/profile', icon: User },
+  { name: 'Settings', href: '/app/settings', icon: Settings },
+  { name: 'Profile', href: '/app/profile', icon: User },
 ];
 
 export default function Sidebar() {
