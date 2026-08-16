@@ -16,8 +16,6 @@ dist-ssr
 !.env.example
 backend/venv/
 backend/data/wafers.db
-__pycache__/
-*.pyc
 
 # Editor directories and files
 .vscode/*
